@@ -1,32 +1,84 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app id="inspire">
+    <v-navigation-drawer v-model="drawer" absolute temporary app>
+      <!-- Menu -->
+      <v-list nav dense>
+        <v-list-item-group
+          v-model="group"
+          active-class="deep-purple--text text--accent-4"
+        >
+          <v-list-item
+          v-for="link of links"
+          :key="link.title"
+          :to="link.url"
+          >
+            <v-list-item-title><v-icon left>{{link.icon}}</v-icon>{{link.title}}</v-list-item-title>
+          </v-list-item>
+
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar dark color="primary" app>
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+
+      <v-toolbar-title>{{appName}}</v-toolbar-title>
+      <v-spacer></v-spacer>
+    <v-btn
+      :loading="loading"
+      :disabled="loading"
+      @click="loader = 'loading'"
+      fab
+      text 
+      large
+    
+    >
+      <v-icon dark>mdi-refresh</v-icon>
+    </v-btn>
+    </v-app-bar>
+
+    <v-main>
+      <!-- Main -->
+      <router-view></router-view>
+    </v-main>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+export default {
+  data() {
+    return {
+      loader: null,
+      loading: false,
+      group: null,
+      drawer: null,
+      links: [
+        {title: 'Task List', icon: 'mdi-playlist-check', url: '/'},
+        {title: 'Profile', icon: 'mdi-account', url: '/profile'},
+        {title: 'Settings', icon: 'mdi-cog-outline', url: '/settings'},
+      ]
+    };
+  },
+  computed: {
+        appName () {
+            return this.$store.state.appName
+        }
+  },
+  watch: {
+    group() {
+      this.drawer = false;
+    },
+    loader () {
+        const l = this.loader
+        this[l] = !this[l]
 
-#nav {
-  padding: 30px;
-}
+        setTimeout(() => (this[l] = false), 3000)
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+        this.loader = null
+      },
+  },
+};
+</script>
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+<style lang="scss">
 </style>
