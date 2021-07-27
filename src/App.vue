@@ -65,18 +65,24 @@ export default {
         }
   },
   watch: {
+
     group() {
       this.drawer = false;
     },
-    loader () {
+    async loader () {
         const l = this.loader
         this[l] = !this[l]
-
         setTimeout(() => (this[l] = false), 3000)
-
         this.loader = null
-      },
+    },
   },
+  created() {
+  if (this.$workbox) {
+    this.$workbox.addEventListener("waiting", () => {
+      this.showUpdateUI = true;
+    });
+  }
+}
 };
 </script>
 

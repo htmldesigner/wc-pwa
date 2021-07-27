@@ -4,6 +4,11 @@ module.exports = {
   ],
 
   pwa: {
-    name: 'CheckWater'
+    workboxPluginMode: 'InjectManifest',
+    name: 'CheckWater',
+    themeColor: '#4B31B3',
+    workboxOptions: {
+      swSrc: 'src/service-worker.js',
+    }
   }
 }
