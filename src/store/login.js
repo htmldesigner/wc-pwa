@@ -1,8 +1,7 @@
 export default {
     state: {
         authorized: false,
-        login: "",
-        passwordHash: "",
+        token: ""
     },
     mutations: {},
     actions: {},
