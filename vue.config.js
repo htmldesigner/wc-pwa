@@ -8,7 +8,8 @@ module.exports = {
     name: 'CheckWater',
     themeColor: '#4B31B3',
     workboxOptions: {
-      swSrc: 'src/service-worker.js',
+      swSrc: "src/service-worker.js",
+
     }
   }
 }

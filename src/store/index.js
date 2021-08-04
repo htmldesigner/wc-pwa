@@ -9,11 +9,20 @@ export default new Vuex.Store({
   state: {
     appName: 'Water PWA',
     server: 'http://127:0.0.1:3000/',
-    isOnline: false
+    isOnline: false,
+    syncInterval: 15
   },
   mutations: {
+    SET_ONLINE(state, bool) {
+      state.isOnline = bool
+    }
   },
   actions: {
+    setOnline({
+      commit
+  }, obj) {
+      commit("SET_ONLINE", obj);
+  },
   },
   getters: {
     server(state){

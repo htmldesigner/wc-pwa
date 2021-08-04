@@ -188,11 +188,12 @@ export default {
   data() {
     return {
       taskData: {
-        id: null,
+        task_id: null,
         value: 0,
         valueR: 0,
-        image: "",
-        date: "12-12-2021",
+        image: null,
+        date: null,
+        coordinates: null
       },
       valid: false,
       snackbar: {
@@ -209,7 +210,7 @@ export default {
       devices: [],
     };
   },
-    components: {
+  components: {
     "vue-web-cam": WebCam,
   },
   watch: {
@@ -221,7 +222,7 @@ export default {
       setTimeout(() => {
         this[l] = false;
         console.log(this.taskData);
-      }, 3000);
+      }, 1000);
 
       this.loader = null;
     },
@@ -252,16 +253,23 @@ export default {
   methods: {
     addTask() {
       if (this.taskData) {
-        this.taskData.id = this.$route.params.id
+        this.$getLocation().then((coordinates) => {
+         this.taskData.coordinates = coordinates
+        })
+        .catch(()=>{
+          this.taskData.coordinates = null
+        });
+        let date = new Date(Date.now())
+        this.taskData.date = date
+        this.taskData.task_id = this.$route.params.id;
         this.$store.dispatch("addUpload", this.taskData);
-        this.img = null
+        this.img = null;
       }
     },
     onCapture() {
       if (this.$refs.webcam.capture() != "data:,") {
         this.img = this.$refs.webcam.capture();
         this.taskData.image = this.img;
-        
       }
       console.log(this.taskData.image);
     },
@@ -292,7 +300,6 @@ export default {
       // console.log("On Camera Change Event", deviceId);
     },
   },
-
 };
 </script>
 

@@ -5,12 +5,11 @@ import Login from '../components/Auth/Login'
 import Profile from '../components/Auth/Profile'
 import Task from '../components/Task'
 import Settings from '../components/AppSettings'
-
+import NotFound from '../components/NotFound'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'Home',
     component: Home
@@ -35,7 +34,11 @@ const routes = [
     name: 'Task',
     component: Task
   },
-
+  {
+    path: '*',
+    name: 'NotFound',
+    component: NotFound
+  }
 ]
 
 const router = new VueRouter({

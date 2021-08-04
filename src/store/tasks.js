@@ -5,7 +5,7 @@ export default {
     },
     mutations: {
         ADD_UPLOAD(state, obj) {
-            if (state.upload.map(upload => upload.id).indexOf(obj.id) === -1) {
+            if (state.upload.map(upload => upload.task_id).indexOf(obj.task_id) === -1) {
                 state.upload.push(obj)
             }
 
@@ -22,7 +22,6 @@ export default {
             } else {
                 const findNewItem = (oldItem) => [obj].find(item => item.id === oldItem.id);
                 state.tasks = state.tasks.map(item => findNewItem(item)||item);
-
             }
             
         },
@@ -55,6 +54,9 @@ export default {
     getters: {
         tasks(state) {
             return state.tasks
+        },
+        uploads(state) {
+            return state.upload
         },
         activeTasks(state) {
             return state.tasks.filter(task => {

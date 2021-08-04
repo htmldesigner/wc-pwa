@@ -50,9 +50,11 @@ export default {
         data.forEach(element => {
             this.addTask(element)
         });
+        this.$store.dispatch("setOnline", true);
       })
       .catch((e) => {
-        this.errrors.push(e);
+        console.log(e);
+        this.$store.dispatch("setOnline", false);
       });
   },
 };
