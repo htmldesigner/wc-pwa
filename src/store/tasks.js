@@ -1,18 +1,10 @@
 export default {
     state: {
         tasks: [],
-        upload: []
+        
     },
     mutations: {
-        ADD_UPLOAD(state, obj) {
-            if (state.upload.map(upload => upload.task_id).indexOf(obj.task_id) === -1) {
-                state.upload.push(obj)
-            }
 
-        },
-        DELETE_UPLOAD(state, obj) {
-            state.upload.splice(state.upload.indexOf(obj), 1)
-        },
         ADD_TASK(state, obj) {
             // console.log(state.tasks.map(tasks => tasks.id).indexOf(obj.id))
             // console.log(state.tasks.indexOf(obj))
@@ -30,16 +22,7 @@ export default {
         },
     },
     actions: {
-        addUpload({
-            commit
-        }, obj) {
-            commit("ADD_UPLOAD", obj);
-        },
-        deleteUpload({
-            commit
-        }, obj) {
-            commit("DELETE_UPLOAD", obj)
-        },
+
         addTask({
             commit
         }, obj) {
@@ -55,16 +38,12 @@ export default {
         tasks(state) {
             return state.tasks
         },
-        uploads(state) {
-            return state.upload
-        },
+
         activeTasks(state) {
             return state.tasks.filter(task => {
                 return task.active
             })
         },
-
-
-
     }
+    
 }

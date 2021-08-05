@@ -89,20 +89,7 @@
                 </figure>
               </v-card-text>
             </v-card>
-            <v-snackbar v-model="snackbar.active">
-              {{ snackbar.text }}
 
-              <template v-slot:action="{ attrs }">
-                <v-btn
-                  color="pink"
-                  snackbar.text
-                  v-bind="attrs"
-                  @click="snackbar.active = false"
-                >
-                  Close
-                </v-btn>
-              </template>
-            </v-snackbar>
           </template>
           <template v-slot:default="dialog">
             <!-- Dialog Template -->
@@ -158,8 +145,7 @@
                     v-show="camera != null"
                     @click="
                       onCapture();
-                      snackbar.text = 'Image added!';
-                      snackbar.active = true;
+                      
                       dialog.value = false;
                       onStop();
                     "
@@ -184,6 +170,7 @@
 <script>
 import { WebCam } from "vue-web-cam";
 
+
 export default {
   data() {
     return {
@@ -196,10 +183,7 @@ export default {
         coordinates: null
       },
       valid: false,
-      snackbar: {
-        active: false,
-        text: "",
-      },
+
 
       loader: null,
       loading: false,
@@ -218,12 +202,13 @@ export default {
       const l = this.loader;
       this[l] = !this[l];
       // upload server or save cache
-      this.addTask();
+      
       setTimeout(() => {
         this[l] = false;
-        console.log(this.taskData);
+        this.addTask();
+ 
       }, 1000);
-
+      this.$router.push('/')
       this.loader = null;
     },
     camera: function (id) {
@@ -263,7 +248,9 @@ export default {
         this.taskData.date = date
         this.taskData.task_id = this.$route.params.id;
         this.$store.dispatch("addUpload", this.taskData);
+        this.$store.dispatch("addNotifi", {text:"Updated"});
         this.img = null;
+        
       }
     },
     onCapture() {
@@ -272,6 +259,7 @@ export default {
         this.taskData.image = this.img;
       }
       console.log(this.taskData.image);
+      this.$store.dispatch("addNotifi", {text:"Image Added"});
     },
     onStarted(stream) {
       console.log("On Started Event", stream);

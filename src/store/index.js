@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import tasks from './tasks'
+import upload from './upload'
 import login from './login'
+import notifi from './notifi'
 import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex)
 
@@ -32,7 +34,9 @@ export default new Vuex.Store({
   },
   modules: {
     tasks,
-    login
+    upload,
+    login,
+    notifi
   },
   plugins: [createPersistedState()]
 })

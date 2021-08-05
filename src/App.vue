@@ -36,15 +36,23 @@
 
     <v-main>
       <!-- Main -->
+
+      <v-card v-for="n in notify" :key="n.id">
+        <td><Snackbar :text="n.text" active="true"></Snackbar></td>
+      </v-card>
+
       <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import Snackbar from "./components/Snackbar.vue";
+
 export default {
   data() {
     return {
+      notify: [],
       loader: null,
       loading: false,
       group: null,
@@ -102,6 +110,14 @@ export default {
     },
   },
   created() {
+    let data = this.$store.getters.getNotifi;
+
+    if (data.length) {
+      this.notify = data;
+      data.forEach((obj) => {
+        this.$store.dispatch("deleteNotifi", obj);
+      });
+    }
     setInterval(() => {
       this.$axios
         .get("echo")
@@ -116,6 +132,9 @@ export default {
           this.$store.dispatch("setOnline", false);
         });
     }, 15000);
+  },
+  components: {
+    Snackbar,
   },
 };
 </script>
