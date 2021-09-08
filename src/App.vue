@@ -1,38 +1,48 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" absolute temporary app>
-      <v-list nav dense>
-        <v-list-item-group
-            active-class="deep-purple--text text--accent-4"
-        >
-          <v-list-item v-for="link of links" :key="link.title" :to="link.url">
-            <v-list-item-title
-            >
-              <v-icon left>{{ link.icon }}
-              </v-icon
-              >
-              {{ link.title }}
-            </v-list-item-title
-            >
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </v-navigation-drawer>
     <v-app-bar dark color="primary" app>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
+      <v-btn v-if="$route.path !== '/'"
+             fab
+             text
+             small
+             @click="$router.go(-1)"
+             style="width: 0; margin-left: 10px; margin-right: 30px"
+      >
+        <v-icon dark>mdi-arrow-left</v-icon>
+      </v-btn>
       <v-toolbar-title>{{ appName }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-          @click="reloadAllList"
-          :loading="loading"
-          :disabled="loading"
-          fab
-          text
-          small
-      >
-        <v-icon dark>mdi-refresh</v-icon>
-      </v-btn>
+      <v-menu>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              fab
+              text
+              small
+              v-bind="attrs"
+              v-on="on"
+              style="width: 0; margin-left: 10px; margin-right: 10px"
+          >
+            <v-icon dark>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list flat>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title @click="reloadAllList">{{ 'Обнавить данные' }}</v-list-item-title>
+              <v-list-item-subtitle style="font-size: 12px">Список потребителей</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title @click="$router.push('/settings')">{{ 'Настройки' }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title @click="logOut">{{ 'Выход' }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+
+      </v-menu>
+
     </v-app-bar>
     <v-main>
       <div v-if="!loading">
@@ -62,18 +72,12 @@ export default {
     ...mapGetters(['loading', 'appName'])
   },
   data() {
-    return {
-      notify: [],
-      drawer: null,
-      links: [
-        {title: "Списик потребителей", icon: "mdi-playlist-check", url: "/"},
-        // {title: "Профиль", icon: "mdi-account", url: "/profile"},
-        // {title: "Настройки", icon: "mdi-cog-outline", url: "/settings"},
-      ],
-    };
+    return {};
   },
-
   methods: {
+    logOut() {
+      console.log('Exit')
+    },
     async reloadAllList() {
       await this.$store.dispatch('getTaskList')
     },

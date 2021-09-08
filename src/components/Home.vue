@@ -8,17 +8,14 @@
             mb-5
             v-for="task in tasks"
             v-bind:key="task.id"
+            :to="'/task/' + task.id"
         >
-          <v-layout column mb-3>
+          <v-layout mb-3>
             <v-card-text>
-              <h3>Ф.И.О </h3>
+              <h3>Ф.И.О {{task.title}}</h3>
               <Address>{{ task.adress }}</Address>
-              <p>Последняя поверка: {{ task.lastCheck }}</p>
+              <span>Последняя поверка: {{ task.lastCheck }}</span>
             </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn class="info" small :to="'/task/' + task.id"><v-icon dark>mdi-arrow-right-bottom</v-icon></v-btn>
-            </v-card-actions>
           </v-layout>
         </v-card>
       </v-flex>
@@ -29,6 +26,7 @@
 
 <script>
 import {mapGetters} from 'vuex';
+
 export default {
   computed: {
     ...mapGetters(['tasks', 'loading'])
