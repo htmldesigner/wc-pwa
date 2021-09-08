@@ -1,62 +1,38 @@
 <template>
   <v-container>
-    <v-layout>
+    <h2 class="mb-3">Список потребителей</h2>
+    <v-layout v-if="tasks">
       <v-flex xs12>
-        <h1>List</h1>
         <v-card
-          class="elevation-10"
-          mb-5
-          v-for="task in tasks"
-          v-bind:key="task.id"
+            class="elevation-4"
+            mb-5
+            v-for="task in tasks"
+            v-bind:key="task.id"
         >
-          <v-layout mb-3>
-            <v-card-text
-              ><h2>{{ task.title }}</h2>
+          <v-layout column mb-3>
+            <v-card-text>
+              <h3>Ф.И.О </h3>
               <Address>{{ task.adress }}</Address>
+              <p>Последняя поверка: {{ task.lastCheck }}</p>
             </v-card-text>
-            <v-card-text>Last Check: {{ task.lastCheck }}</v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn class="info" :to="'/task/' + task.id">Open</v-btn>
+              <v-btn class="info" small :to="'/task/' + task.id"><v-icon dark>mdi-arrow-right-bottom</v-icon></v-btn>
             </v-card-actions>
           </v-layout>
         </v-card>
       </v-flex>
     </v-layout>
+    <v-layout v-if="!loading && !tasks.length" mt-2>Нет потребителей</v-layout>
   </v-container>
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 export default {
-  data() {
-    return {};
-  },
   computed: {
-    tasks() {
-      return this.$store.getters.tasks;
-    },
-  },
-  methods: {
-    addTask(data) {
-        this.$store.dispatch("addTask", data);
-    },
-  },
-  created() {
-    this.$axios
-      .get("tasks")
-      .then((response) => {
-        
-        let data = response.data
-        data.forEach(element => {
-            this.addTask(element)
-        });
-        this.$store.dispatch("setOnline", true);
-      })
-      .catch((e) => {
-        console.log(e);
-        this.$store.dispatch("setOnline", false);
-      });
-  },
+    ...mapGetters(['tasks', 'loading'])
+  }
 };
 </script>
 

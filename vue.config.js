@@ -3,6 +3,10 @@ module.exports = {
     'vuetify'
   ],
 
+  devServer: {
+    proxy: "https://wc-pwa-server.herokuapp.com"
+  },
+
   pwa: {
     workboxPluginMode: 'InjectManifest',
     name: 'CheckWater',
