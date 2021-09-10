@@ -6,13 +6,16 @@ import Profile from '../components/Auth/Profile'
 import Task from '../components/Task'
 import Settings from '../components/AppSettings'
 import NotFound from '../components/NotFound'
+import AuthGuard from './Auth-guard'
 
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+  {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    beforeEnter: AuthGuard
   },
   {
     path: '/login',
@@ -22,17 +25,20 @@ const routes = [{
   {
     path: '/profile',
     name: 'Profile',
-    component: Profile
+    component: Profile,
+    beforeEnter: AuthGuard
   },
   {
     path: '/settings',
     name: 'Settings',
-    component: Settings
+    component: Settings,
+    beforeEnter: AuthGuard
   },
   {
     path: '/task/:id',
     name: 'Task',
-    component: Task
+    component: Task,
+    beforeEnter: AuthGuard
   },
   {
     path: '*',

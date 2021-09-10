@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import tasks from './tasks'
-import login from './login'
+import auth from './auth'
 import common from "./common";
 import createPersistedState from "vuex-persistedstate";
 
@@ -31,7 +31,7 @@ export default new Vuex.Store({
   modules: {
     common,
     tasks,
-    login,
+    auth,
   },
   // plugins: [createPersistedState()]
 })

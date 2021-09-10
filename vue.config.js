@@ -4,7 +4,7 @@ module.exports = {
   ],
 
   devServer: {
-    proxy: "https://wc-pwa-server.herokuapp.com"
+    proxy: "http://esep.web-design.kz/"
   },
 
   pwa: {

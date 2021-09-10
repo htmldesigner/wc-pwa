@@ -7,32 +7,22 @@
             <v-col cols="12" sm="8" md="6">
               <v-card class="elevation-12">
                 <v-toolbar color="primary" dark flat>
-                  <v-toolbar-title>Login</v-toolbar-title>
-                  
+                  <v-toolbar-title>Авторизация</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
                   <v-form v-model="valid" ref="form" validation>
                     <v-text-field
-                      label="Login"
-                      name="login"
-                      prepend-icon="mdi-account"
-                      type="text"
-                      v-model="login"
-                    ></v-text-field>
-
-                    <v-text-field
-                      id="password"
-                      label="Password"
-                      name="password"
-                      prepend-icon="mdi-lock"
-                      type="password"
-                      v-model="password"
+                        label="Токен"
+                        name="login"
+                        prepend-icon="mdi-account"
+                        type="text"
+                        v-model="token"
                     ></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary">Login</v-btn>
+                  <v-btn color="primary" @click="onSubmit">Вход</v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -47,15 +37,21 @@
 export default {
   data() {
     return {
-        login: "",
-        password:"",
-        valid: false
+      token: null,
+      valid: false
     };
   },
   methods: {
-      onSubmit () {
-
+    onSubmit() {
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch('userAuth', this.token)
+            .then(() => {
+              this.$router.push('/');
+            })
+            .catch(() => {
+            });
       }
+    },
   }
 };
 </script>

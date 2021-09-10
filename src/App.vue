@@ -75,17 +75,18 @@ export default {
     return {};
   },
   methods: {
-    logOut() {
-      console.log('Exit')
+    async logOut() {
+      await this.$store.dispatch('logOut')
+      await this.$router.push('/login');
     },
     async reloadAllList() {
       await this.$store.dispatch('getTaskList')
     },
 
   },
-  async mounted() {
-    await this.$store.dispatch('getTaskList')
-  }
+  // async mounted() {
+  //   await this.$store.dispatch('getTaskList')
+  // }
 };
 </script>
 
