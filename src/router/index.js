@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../components/Home'
 import Login from '../components/Auth/Login'
 import Profile from '../components/Auth/Profile'
-import Task from '../components/Task'
+import TaskList from '../components/TaskList'
 import Settings from '../components/AppSettings'
 import NotFound from '../components/NotFound'
 import AuthGuard from './Auth-guard'
@@ -37,7 +37,7 @@ const routes = [
   {
     path: '/task/:id',
     name: 'Task',
-    component: Task,
+    component: TaskList,
     beforeEnter: AuthGuard
   },
   {
