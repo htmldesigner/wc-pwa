@@ -8,12 +8,14 @@ export default {
   mutations: {
     ADD_TOKEN(state, payload) {
       state.token = payload
+      localStorage.setItem('token', payload)
     },
     ADD_AGENT(state, payload) {
       state.agent = payload
     },
     LOG_OUT(state) {
       state.agent = null
+      localStorage.removeItem('token')
     }
   },
   actions: {
@@ -44,7 +46,7 @@ export default {
   },
   getters: {
     agent(state) {
-      return state.agent
+      return state.agent || localStorage.getItem('token')
     },
     isAgentLoggedIn(state) {
       return state.agent !== null

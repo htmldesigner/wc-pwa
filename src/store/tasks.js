@@ -7,7 +7,7 @@ export default {
 
   mutations: {
     ADD_TASK(state, payload) {
-      state.tasks = [...payload]
+      state.tasks = payload
     }
   },
 
@@ -16,7 +16,8 @@ export default {
       try {
         commit('clearError')
         commit('setLoading', true)
-        const {data} = await axios.get("tasks")
+        const {data} = await axios.get("/api/consumers")
+        console.log(data)
         commit('ADD_TASK', data)
         commit('setLoading', false)
       } catch (error) {

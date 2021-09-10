@@ -84,9 +84,9 @@ export default {
     },
 
   },
-  // async mounted() {
-  //   await this.$store.dispatch('getTaskList')
-  // }
+  async mounted() {
+    await this.$store.dispatch('getTaskList')
+  }
 };
 </script>
 
