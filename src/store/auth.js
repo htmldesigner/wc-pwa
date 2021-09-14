@@ -35,6 +35,7 @@ export default {
         } else {
           commit('ADD_AGENT', data)
           commit('ADD_TOKEN', token)
+          dispatch('getTaskList')
         }
       } catch (e) {
         console.log(e)
@@ -48,6 +49,7 @@ export default {
     agent(state) {
       return state.agent || localStorage.getItem('token')
     },
+    token: (state) =>  state.token,
     isAgentLoggedIn(state) {
       return state.agent !== null
     }

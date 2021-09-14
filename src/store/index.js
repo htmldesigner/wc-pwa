@@ -4,7 +4,6 @@ import tasks from './tasks'
 import auth from './auth'
 import common from "./common";
 import VueGeolocation from 'vue-browser-geolocation';
-import router from '@/router'
 
 Vue.use(VueGeolocation);
 Vue.use(Vuex)

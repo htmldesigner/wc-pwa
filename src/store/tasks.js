@@ -13,14 +13,16 @@ export default {
 
   actions: {
     async getTaskList({commit}) {
+      commit('clearError')
+      commit('setLoading', true)
       try {
-        commit('clearError')
-        commit('setLoading', true)
-        const {data} = await axios.get("/api/consumers")
-        if (data) {
-          commit('ADD_TASK', data)
-          commit('setLoading', false)
-        }
+        const {data} = await axios.get("/api/consumers", {
+          headers: {
+            token: localStorage.getItem('token')
+          }
+        })
+        commit('ADD_TASK', data)
+        commit('setLoading', false)
       } catch (error) {
         commit('setError', error.message)
         commit('setLoading', false)
@@ -29,9 +31,9 @@ export default {
     },
 
     async sendTask({commit}, payload) {
+      commit('clearError')
+      commit('setLoading', true)
       try {
-        commit('clearError')
-        commit('setLoading', true)
         let formElem = new FormData()
         formElem.append('device', payload.device)
         formElem.append('value', payload.value)

@@ -14,11 +14,7 @@ if (token) {
 }
 
 Vue.config.productionTip = false
-
 Vue.use(VueGeolocation);
-
-
-
 new Vue({
   router,
   vuetify,

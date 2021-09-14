@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h2 class="mb-3">Список потребителей</h2>
-    <v-layout v-if="tasks">
+    <v-layout >
       <v-flex xs12>
         <v-card
             class="elevation-4"
@@ -29,13 +29,16 @@ import {mapGetters} from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters(['tasks', 'loading'])
-  },
-  // mounted() {
-  //   if (this.$store.getters.isAgentLoggedIn) {
-  //     this.$store.dispatch('getTaskList')
-  //   }
-  // }
+    isAgentLoggedIn(){
+      return this.$store.getters.isAgentLoggedIn
+    },
+    tasks(){
+      return this.$store.getters.tasks
+    },
+    loading(){
+      return this.$store.getters.loading
+    }
+  }
 };
 </script>
 
