@@ -16,7 +16,7 @@
 
 <script>
 export default {
-    
+
     props: {
         text: String,
         active: Boolean

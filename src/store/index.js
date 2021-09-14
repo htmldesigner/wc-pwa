@@ -3,30 +3,38 @@ import Vuex from 'vuex'
 import tasks from './tasks'
 import auth from './auth'
 import common from "./common";
-import createPersistedState from "vuex-persistedstate";
+import VueGeolocation from 'vue-browser-geolocation';
+import router from '@/router'
 
+Vue.use(VueGeolocation);
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     appName: "E-SEP",
-    server: 'http://127:0.0.1:3000/',
-    isOnline: false,
-    syncInterval: 15
+    coordinates: null
   },
   mutations: {
-    SET_ONLINE(state, bool) {
-      state.isOnline = bool
+    addCoordinates(state, payload) {
+      state.coordinates = [payload.lat, payload.lng].join(",")
+      console.log(state.coordinates)
     }
   },
+
   actions: {
-    setOnline({commit}, obj) {
-      commit("SET_ONLINE", obj);
+    detectCoordinates({state, commit, dispatch}) {
+      VueGeolocation.getLocation()
+        .then(coordinates => {
+          commit('addCoordinates', coordinates)
+        }).catch(e => {
+        alert('Разрешите доступ к геоданным')
+      })
     }
   },
+
   getters: {
-    server: (state) => state.server,
-    appName: (state) => state.appName
+    appName: (state) => state.appName,
+    coordinates: (state) => state.coordinates
   },
   modules: {
     common,

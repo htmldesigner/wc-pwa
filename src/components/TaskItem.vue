@@ -1,102 +1,136 @@
 <template>
   <div>
 
-    <v-card>
-      <v-layout mb-3 mt-5>
-        <v-card-text>
-          <p>{{ task.name }}</p>
-          <p>{{ task.address }}</p>
-        </v-card-text>
-      </v-layout>
-    </v-card>
+    <div v-if="dev">
+      <v-card>
+        <v-form>
+          <v-layout mb-3 mt-5>
+            <v-card-text>
+              <h1>№ {{ dev.number }}</h1>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="12">
+                    <v-text-field
+                        label="Текущие показания"
+                        type="number"
+                        prepend-icon="mdi-counter"
+                        v-model.number="value"
+                        :counter="10"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
 
-    <div v-if="task.devices">
-      <div v-for="device in task.devices" :key="device.id">
-        <v-card>
-          <v-form>
-            <v-layout mb-3 mt-5>
-              <v-card-text>
-                <h1>№ {{ device.number }}</h1>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="12">
-                      <IndicationField/>
-                    </v-col>
-                  </v-row>
-                </v-container>
-
-                <v-card-actions>
-                  <div>
-                    <span>Последняя поверка: </span>
-                    <span v-if="device.verified">
-                      {{ device.verified }}
+              <v-card-actions>
+                <div>
+                  <span>Последняя поверка: </span>
+                  <span v-if="dev.verified">
+                      {{ dev.verified }}
                     </span>
-                  </div>
-                  <v-spacer></v-spacer>
-                  <!--                <v-btn-->
-                  <!--                    color="primary"-->
-                  <!--                    v-bind="attrs"-->
-                  <!--                    v-on="on"-->
-                  <!--                    @click="onStart();img = null;"-->
-                  <!--                >-->
-                  <!--                  Фото-->
-                  <!--                </v-btn>-->
+                </div>
+                <v-spacer></v-spacer>
 
-                  <v-btn
-                      class="ma-2"
-                      color="success"
-                      @click="onSubmit"
-                  >
-                    Отправить
-                    <template v-slot:loader>
-                      <span>Loading...</span>
-                    </template>
-                  </v-btn>
-                </v-card-actions>
-              </v-card-text>
-            </v-layout>
-          </v-form>
-        </v-card>
-      </div>
+                <v-btn
+                    color="primary"
+                    @click="showDialog"
+                >
+                  Поверка
+                </v-btn>
+
+                <v-btn
+                    class="ma-2"
+                    color="success"
+                    @click.prevent="onSubmit(dev.id)"
+                >
+                  Отправить паказания
+                  <template v-slot:loader>
+                    <span>Loading...</span>
+                  </template>
+                </v-btn>
+              </v-card-actions>
+            </v-card-text>
+          </v-layout>
+        </v-form>
+      </v-card>
     </div>
 
-    <!--  <v-card mb-5 mt-5 v-show="img !== null">-->
-    <!--    <v-card-text>-->
-    <!--      <figure class="figure">-->
-    <!--        <v-img-->
-    <!--            height="100px"-->
-    <!--            width="100px"-->
-    <!--            :src="img"-->
-    <!--            class="img-responsive"-->
-    <!--        />-->
-    <!--      </figure>-->
-    <!--    </v-card-text>-->
-    <!--  </v-card>-->
+    <v-dialog v-model="dialog" width="500">
+      <template v-slot:default="dialog">
+        <v-card>
+          <v-toolbar color="primary" dark>
+            <v-spacer></v-spacer>
+            <v-btn
+                icon
+                dark
+                @click="hideDialog"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+
+          <v-card-text>
+
+            <div>
+              <VerificationForm
+                  :dialog="dialog"
+                  :devId="dev.id"
+                  :closeDialog="closeDialogValue"
+              />
+            </div>
+
+          </v-card-text>
+        </v-card>
+      </template>
+    </v-dialog>
+
   </div>
 </template>
 
 <script>
 import {mapGetters} from "vuex";
 import IndicationField from "./fields/IndicationField";
+import VerificationForm from "./VerificationForm";
 
 export default {
   components: {
-    IndicationField
+    IndicationField,
+    VerificationForm
   },
   name: "TaskItem",
-  props: ['task'],
+  props: ['dev'],
   computed: {
     ...mapGetters(['loading', 'appName'])
   },
   data() {
     return {
-      value: ''
+      value: '',
+      dialog: false,
+      closeDialogValue: null
     }
   },
+
   methods: {
-    onSubmit() {
-      if (this.value) {
-        console.log(this.value)
+    showDialog() {
+      this.closeDialogValue = null
+      this.dialog = !this.dialog
+    },
+
+    hideDialog() {
+      this.dialog = false
+      this.closeDialogValue = false
+    },
+
+    onSubmit(deviceId) {
+      if (this.value && deviceId) {
+        let newData = {device: deviceId, value: this.value}
+        this.$store.dispatch('sendTask', newData).then(response => {
+          if (response.error) {
+            return alert(response.error)
+          }
+          if (response === 'success') {
+            return alert('Обнавленно')
+          }
+        })
       }
     }
   }

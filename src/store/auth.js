@@ -19,7 +19,7 @@ export default {
     }
   },
   actions: {
-    async userAuth({commit}, token) {
+    async userAuth({state, commit, dispatch}, token) {
       try {
         let formElem = new FormData()
         formElem.append('token', token)

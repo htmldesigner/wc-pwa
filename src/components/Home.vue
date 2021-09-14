@@ -7,12 +7,12 @@
             class="elevation-4"
             mb-5
             v-for="task in tasks.items"
-            v-bind:key="task.id"
+            :key="task.id"
             :to="'/task/' + task.id"
         >
           <v-layout mb-3>
             <v-card-text>
-              <h3>{{task.name}}</h3>
+              <h3>{{ task.name }}</h3>
               <Address>{{ task.address }}</Address>
               <span>Последняя поверка: {{ task.lastCheck }}</span>
             </v-card-text>
@@ -30,7 +30,12 @@ import {mapGetters} from 'vuex';
 export default {
   computed: {
     ...mapGetters(['tasks', 'loading'])
-  }
+  },
+  // mounted() {
+  //   if (this.$store.getters.isAgentLoggedIn) {
+  //     this.$store.dispatch('getTaskList')
+  //   }
+  // }
 };
 </script>
 

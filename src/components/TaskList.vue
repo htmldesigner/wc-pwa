@@ -2,84 +2,23 @@
   <v-container>
     <v-layout>
       <v-flex xs12>
-        <!-- {{$route.params.id}} -->
-
-        <v-dialog transition="dialog-top-transition" max-width="600">
-          <template v-slot:activator="{ on, attrs }">
-
-{{tasks}}
-
-              <TaskItem v-for="task in tasks" :key="task.id" :task="task"></TaskItem>
 
 
+        <div v-for="task in tasks" :key="task.id">
+          <v-card>
+            <v-layout mb-5 mt-5>
+              <v-card-text>
+                <p><strong>{{ task.name }}</strong></p>
+                <p><strong>{{ task.address }}</strong></p>
+              </v-card-text>
+            </v-layout>
+          </v-card>
 
-          </template>
-<!--          <template v-slot:default="dialog">-->
-<!--            &lt;!&ndash; Dialog Template &ndash;&gt;-->
-<!--            <v-card>-->
-<!--              <v-toolbar color="primary" dark-->
-<!--              >Camera-->
-<!--                <v-spacer></v-spacer>-->
-<!--                <v-btn-->
-<!--                    icon-->
-<!--                    dark-->
-<!--                    @click="-->
-<!--                    dialog.value = false;-->
-<!--                    onStop();-->
-<!--                  "-->
-<!--                >-->
-<!--                  <v-icon>mdi-close</v-icon>-->
-<!--                </v-btn>-->
-<!--              </v-toolbar>-->
-<!--              <v-card-text>-->
-<!--                <v-btn-toggle-->
-<!--                    v-model="camera"-->
-<!--                    tile-->
-<!--                    color="deep-purple accent-3"-->
-<!--                    group-->
-<!--                    mandatory-->
-<!--                    xs12-->
-<!--                >-->
-<!--                  <v-btn-->
-<!--                      v-for="device in devices"-->
-<!--                      :key="device.deviceId"-->
-<!--                      :value="device.deviceId"-->
-<!--                      xs12-->
-<!--                  >-->
-<!--                    {{ device.label }}-->
-<!--                  </v-btn>-->
-<!--                </v-btn-toggle>-->
-<!--                <div>-->
-<!--                  <vue-web-cam-->
-<!--                      ref="webcam"-->
-<!--                      :device-id="deviceId"-->
-<!--                      height="80%"-->
-<!--                      @started="onStarted"-->
-<!--                      @stopped="onStopped"-->
-<!--                      @error="onError"-->
-<!--                      @cameras="onCameras"-->
-<!--                      @camera-change="onCameraChange"-->
-<!--                  />-->
-<!--                </div>-->
-<!--                <v-card-actions>-->
-<!--                  <v-btn-->
-<!--                      type="button"-->
-<!--                      class="btn btn-primary"-->
-<!--                      v-show="camera != null"-->
-<!--                      @click="-->
-<!--                      onCapture();-->
-<!--                      -->
-<!--                      dialog.value = false;-->
-<!--                      onStop();-->
-<!--                    "-->
-<!--                  >-->
-<!--                    <v-icon>mdi-camera</v-icon>-->
-<!--                  </v-btn>-->
-<!--                </v-card-actions>-->
-<!--              </v-card-text>-->
-<!--            </v-card>-->
-<!--          </template>-->
-        </v-dialog>
+          <div v-if="task.devices" v-for="device in task.devices" :key="device.id">
+            <TaskItem :dev="device"></TaskItem>
+          </div>
+        </div>
+
       </v-flex>
     </v-layout>
   </v-container>
@@ -87,28 +26,18 @@
 
 
 <script>
-import {WebCam} from "vue-web-cam";
 import TaskItem from "./TaskItem";
 
 export default {
   components: {
-    "vue-web-cam": WebCam, TaskItem
+    TaskItem
   },
   data() {
     return {
       value: 0,
-
       valid: false,
-
-
       loader: null,
       loading: false,
-
-      img: null,
-      camera: null,
-      deviceId: null,
-      devices: [],
-
     };
   },
 
@@ -149,57 +78,40 @@ export default {
     }
   },
   methods: {
-    addTask() {
-      if (this.taskData) {
-        this.$getLocation().then((coordinates) => {
-          this.taskData.coordinates = coordinates
-        })
-            .catch(() => {
-              this.taskData.coordinates = null
-            });
-        let date = new Date(Date.now())
-        this.taskData.date = date
-        this.taskData.task_id = this.$route.params.id;
-        this.$store.dispatch("addUpload", this.taskData);
-        this.$store.dispatch("addNotifi", {text: "Updated"});
-        this.img = null;
-
-      }
-    },
-    onCapture() {
-      if (this.$refs.webcam.capture() != "data:,") {
-        this.img = this.$refs.webcam.capture();
-        this.taskData.image = this.img;
-      }
-      console.log(this.taskData.image);
-      this.$store.dispatch("addNotifi", {text: "Image Added"});
-    },
-    onStarted(stream) {
-      console.log("On Started Event", stream);
-    },
-    onStopped(stream) {
-      console.log("On Stopped Event", stream);
-    },
-    onStop() {
-      this.$refs.webcam.stop();
-    },
-    onStart() {
-      if (this.$refs.webcam) {
-        this.$refs.webcam.start();
-      }
-    },
-    onError(error) {
-      console.log("On Error Event", error);
-    },
-    onCameras(cameras) {
-      this.devices = cameras;
-      // console.log("On Cameras Event", cameras);
-    },
-    onCameraChange(deviceId) {
-      this.deviceId = deviceId;
-      this.camera = deviceId;
-      // console.log("On Camera Change Event", deviceId);
-    },
+    // onCapture() {
+    //   if (this.$refs.webcam.capture() != "data:,") {
+    //     this.img = this.$refs.webcam.capture();
+    //     this.taskData.image = this.img;
+    //   }
+    //   console.log(this.taskData.image);
+    //   this.$store.dispatch("addNotifi", {text: "Image Added"});
+    // },
+    // onStarted(stream) {
+    //   console.log("On Started Event", stream);
+    // },
+    // onStopped(stream) {
+    //   console.log("On Stopped Event", stream);
+    // },
+    // onStop() {
+    //   this.$refs.webcam.stop();
+    // },
+    // onStart() {
+    //   if (this.$refs.webcam) {
+    //     this.$refs.webcam.start();
+    //   }
+    // },
+    // onError(error) {
+    //   console.log("On Error Event", error);
+    // },
+    // onCameras(cameras) {
+    //   this.devices = cameras;
+    //   // console.log("On Cameras Event", cameras);
+    // },
+    // onCameraChange(deviceId) {
+    //   this.deviceId = deviceId;
+    //   this.camera = deviceId;
+    //   // console.log("On Camera Change Event", deviceId);
+    // },
   },
 };
 </script>

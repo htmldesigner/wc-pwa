@@ -82,10 +82,11 @@ export default {
     async reloadAllList() {
       await this.$store.dispatch('getTaskList')
     },
-
   },
   async mounted() {
+    await this.$store.dispatch('detectCoordinates')
     await this.$store.dispatch('getTaskList')
+
   }
 };
 </script>
