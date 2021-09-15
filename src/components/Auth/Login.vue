@@ -17,6 +17,8 @@
                         prepend-icon="mdi-account"
                         type="text"
                         v-model="token"
+                        :rules="nameRules"
+                        required
                     ></v-text-field>
                   </v-form>
                 </v-card-text>
@@ -38,7 +40,8 @@ export default {
   data() {
     return {
       token: null,
-      valid: false
+      valid: false,
+      nameRules: [v => !!v || 'Обязательное поле', v => (v && v.length >= 5) || 'Минимум 5 символов'],
     };
   },
   methods: {
