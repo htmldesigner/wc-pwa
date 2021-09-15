@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar dark color="primary" app>
+    <v-app-bar dark color="primary" app dense flat>
       <v-btn v-if="$route.path !== '/'"
              fab
              text
@@ -45,16 +45,7 @@
 
     </v-app-bar>
     <v-main>
-      <div v-if="!loading">
         <router-view></router-view>
-      </div>
-      <div v-else>
-        <v-container fluid class="mt-16">
-          <v-row justify="center" align="center">
-            <Spinner></Spinner>
-          </v-row>
-        </v-container>
-      </div>
     </v-main>
   </v-app>
 </template>

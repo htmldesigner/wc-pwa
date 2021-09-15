@@ -76,43 +76,7 @@ export default {
         return tasks.items.filter((el) => el.id === parseInt(this.$route.params.id))
       }
     }
-  },
-  methods: {
-    // onCapture() {
-    //   if (this.$refs.webcam.capture() != "data:,") {
-    //     this.img = this.$refs.webcam.capture();
-    //     this.taskData.image = this.img;
-    //   }
-    //   console.log(this.taskData.image);
-    //   this.$store.dispatch("addNotifi", {text: "Image Added"});
-    // },
-    // onStarted(stream) {
-    //   console.log("On Started Event", stream);
-    // },
-    // onStopped(stream) {
-    //   console.log("On Stopped Event", stream);
-    // },
-    // onStop() {
-    //   this.$refs.webcam.stop();
-    // },
-    // onStart() {
-    //   if (this.$refs.webcam) {
-    //     this.$refs.webcam.start();
-    //   }
-    // },
-    // onError(error) {
-    //   console.log("On Error Event", error);
-    // },
-    // onCameras(cameras) {
-    //   this.devices = cameras;
-    //   // console.log("On Cameras Event", cameras);
-    // },
-    // onCameraChange(deviceId) {
-    //   this.deviceId = deviceId;
-    //   this.camera = deviceId;
-    //   // console.log("On Camera Change Event", deviceId);
-    // },
-  },
+  }
 };
 </script>
 

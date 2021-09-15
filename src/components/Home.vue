@@ -14,7 +14,6 @@
             <v-card-text>
               <h3>{{ task.name }}</h3>
               <Address>{{ task.address }}</Address>
-              <span>Последняя поверка: {{ task.lastCheck }}</span>
             </v-card-text>
           </v-layout>
         </v-card>

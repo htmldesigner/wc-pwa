@@ -6,9 +6,14 @@ export default {
     agent: null,
   },
   mutations: {
-    ADD_TOKEN(state, payload) {
-      state.token = payload
-      localStorage.setItem('token', payload)
+    ADD_TOKEN(state, token) {
+      state.token = token
+      localStorage.setItem('token', token)
+      if (token) {
+        axios.defaults.headers.common['token'] = `${token}`;
+      } else {
+        delete axios.defaults.headers.common['token'];
+      }
     },
     ADD_AGENT(state, payload) {
       state.agent = payload
@@ -49,7 +54,7 @@ export default {
     agent(state) {
       return state.agent || localStorage.getItem('token')
     },
-    token: (state) =>  state.token,
+    token: (state) => state.token,
     isAgentLoggedIn(state) {
       return state.agent !== null
     }

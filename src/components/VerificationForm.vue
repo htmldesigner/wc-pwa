@@ -1,66 +1,68 @@
 <template>
   <div>
+    <v-form v-model="valid">
 
-    <v-card>
-      <v-layout mb-3 mt-5>
-        <v-col cols="12" sm="12">
-          <v-text-field
-              label="Текущие показания"
-              type="number"
-              prepend-icon="mdi-counter"
-              v-model.number="value"
-              :counter="10"
-          ></v-text-field>
-        </v-col>
-      </v-layout>
-    </v-card>
+      <v-col cols="12" sm="12">
+        <v-text-field
+            label="Текущие показания"
+            type="number"
+            v-model.number="value"
+            :rules="nameRules"
+            :counter="5"
+            required
+        ></v-text-field>
+      </v-col>
 
-    <Camera
-        ref="camera"
-        @cameraActivated="cameraActivated"
-        @image="addImage"
-    />
+      <Camera
+          ref="camera"
+          @cameraActivated="cameraActivated"
+          @image="addImage"
+      />
 
-    <div v-if="cameraActive">
-      <v-container fill-height fluid style="margin-top: 30px; margin-bottom: 20px">
-        <v-row align="center" justify="center">
-          <v-btn
-              style="margin: 0px 10px"
-              type="button"
-              class="btn btn-primary"
-              @click="onCapture"
-          >
-            <v-icon>mdi-camera</v-icon>
-          </v-btn>
+      <div v-if="cameraActive">
 
-          <v-btn
-              style="margin: 0px 10px"
-              type="button"
-              class="btn btn-primary"
-              @click="removeCapture"
-          >
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-row>
-      </v-container>
-      <v-container>
-        <v-row>
-          <v-col cols="12" sm="12">
+        <v-container fill-height fluid style="margin-top: 30px; margin-bottom: 20px">
+          <v-row align="center" justify="center">
             <v-btn
-                width="100%"
-                color="success"
-                @click.prevent="onSubmit"
+                style="margin: 0px 10px"
+                type="button"
+                class="btn btn-primary"
+                @click="onCapture"
             >
-              Отправить паказания
-              <template v-slot:loading>
-                <span>Loading...</span>
-              </template>
+              <v-icon>mdi-camera</v-icon>
             </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
-    </div>
 
+            <v-btn
+                style="margin: 0px 10px"
+                type="button"
+                class="btn btn-primary"
+                @click="removeCapture"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-row>
+        </v-container>
+
+        <v-container>
+          <v-row>
+            <v-col cols="12" sm="12">
+              <v-btn
+                  width="100%"
+                  color="primary"
+                  @click.prevent="onSubmit"
+              >
+                Отправить
+                <template v-slot:loading>
+                  <span>Loading...</span>
+                </template>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+
+      </div>
+
+    </v-form>
   </div>
 </template>
 
@@ -75,8 +77,8 @@ export default {
     loading() {
       return this.$store.getters.loading
     },
-    coordinates(){
-     return this.$store.getters.coordinates
+    coordinates() {
+      return this.$store.getters.coordinates
     }
   },
   name: "VerificationForm",
@@ -97,9 +99,14 @@ export default {
   },
   data() {
     return {
+      valid: false,
       value: '',
       cameraActive: null,
       image: null,
+      nameRules: [
+        v => !!v || 'Обязательно для заполнения',
+        v => v.length <= 5 || 'Не короче 10 цифр',
+      ],
     }
   },
   methods: {
@@ -117,8 +124,18 @@ export default {
       this.cameraActive = value
     },
 
-    onSubmit() {
-      console.log(this.devId, this.value, this.image, this.coordinates)
+    async onSubmit() {
+      if (this.coordinates) {
+        const data = {
+          device: this.devId,
+          value: this.value,
+          coordinates: this.coordinates,
+          photo: await (await (await fetch(this.image))).blob()
+        }
+        this.$store.dispatch('sendVerifications', data)
+      } else {
+        alert('Разрешите доступ к геоданным')
+      }
     }
   }
 }

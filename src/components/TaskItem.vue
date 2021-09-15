@@ -7,9 +7,11 @@
           <v-layout mb-3 mt-5>
             <v-card-text>
               <h1>№ {{ dev.number }}</h1>
+
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="12">
+
                     <v-text-field
                         label="Текущие показания"
                         type="number"
@@ -17,44 +19,56 @@
                         v-model.number="value"
                         :counter="10"
                     ></v-text-field>
+
+                    <div>
+                      <span>Последняя поверка: </span>
+                      <span v-if="dev.verified">
+                      {{ dev.verified }}
+                    </span>
+                    </div>
+
                   </v-col>
                 </v-row>
               </v-container>
 
-              <v-card-actions>
-                <div>
-                  <span>Последняя поверка: </span>
-                  <span v-if="dev.verified">
-                      {{ dev.verified }}
-                    </span>
-                </div>
-                <v-spacer></v-spacer>
 
-                <v-btn
-                    color="primary"
-                    @click="showDialog"
-                >
-                  Поверка
-                </v-btn>
+              <v-row justify="space-between" align="center">
+                <v-col xs="6" class="text-center">
 
-                <v-btn
-                    class="ma-2"
-                    color="success"
-                    @click.prevent="onSubmit(dev.id)"
-                >
-                  Отправить паказания
-                  <template v-slot:loader>
-                    <span>Loading...</span>
-                  </template>
-                </v-btn>
-              </v-card-actions>
+                  <v-btn
+                      color="primary"
+                      @click="showDialog"
+                      width="100%"
+                  >
+                    Поверка
+                  </v-btn>
+
+                </v-col>
+
+                <v-col xs="6" class="text-center">
+                  <v-btn
+                      width="100%"
+                      color="success"
+                      @click.prevent="onSubmit(dev.id)"
+                      :loading="loading"
+                  >
+                    Показания
+                    <template v-slot:loader>
+                      <span>Loading...</span>
+                    </template>
+                  </v-btn>
+
+                </v-col>
+              </v-row>
+
+
             </v-card-text>
           </v-layout>
         </v-form>
       </v-card>
     </div>
 
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog" width="500" dense flat>
       <template v-slot:default="dialog">
         <v-card>
           <v-toolbar color="primary" dark>
