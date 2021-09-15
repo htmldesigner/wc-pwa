@@ -8,8 +8,8 @@
             type="number"
             v-model="value"
             :rules="nameRules"
-            counter
             maxlength="5"
+            counter
             required
         ></v-text-field>
       </v-col>
@@ -104,7 +104,7 @@ export default {
       value: '',
       cameraActive: null,
       image: null,
-      nameRules: [v => !!v || 'Обязательное поле', v => (v && v.length >= 5) || 'Минимум 5 цифр', v => (v && v.length <= 5) || 'Не соответствует'],
+      nameRules: [v => !!v || 'Обязательное поле', v => (v && v.length >= 5) || 'Минимум 5 цифр', v => (v && v.length < 6) || 'Не более 5 цифр'],
     }
   },
   methods: {
@@ -131,8 +131,9 @@ export default {
           photo: await (await (await fetch(this.image))).blob()
         }
         this.$store.dispatch('sendVerifications', data)
+        this.$emit('hideDialog')
       } else {
-        alert('Разрешите доступ к геоданным')
+        alert('Разрешите доступ к геоданным и перезагрузите приложение')
       }
     }
   }

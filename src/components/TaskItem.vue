@@ -3,7 +3,7 @@
 
     <div v-if="dev">
       <v-card>
-        <v-form>
+        <v-form ref="form" v-model="valid" validation>
           <v-layout mb-3 mt-5>
             <v-card-text>
               <h1>№ {{ dev.number }}</h1>
@@ -11,22 +11,21 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="12">
-
                     <v-text-field
                         label="Текущие показания"
                         type="number"
-                        prepend-icon="mdi-counter"
-                        v-model.number="value"
-                        :counter="10"
+                        v-model="value"
+                        :rules="nameRules"
+                        maxlength="5"
+                        counter
+                        required
                     ></v-text-field>
-
                     <div>
                       <span>Последняя поверка: </span>
                       <span v-if="dev.verified">
                       {{ dev.verified }}
                     </span>
                     </div>
-
                   </v-col>
                 </v-row>
               </v-container>
@@ -39,8 +38,12 @@
                       color="primary"
                       @click="showDialog"
                       width="100%"
+                      :disabled="loading"
                   >
                     Поверка
+                    <template v-slot:loader>
+                      <span>Отправка...</span>
+                    </template>
                   </v-btn>
 
                 </v-col>
@@ -50,11 +53,11 @@
                       width="100%"
                       color="success"
                       @click.prevent="onSubmit(dev.id)"
-                      :loading="loading"
+                      :disabled="!valid || loading"
                   >
                     Показания
                     <template v-slot:loader>
-                      <span>Loading...</span>
+                      <span>Отправка...</span>
                     </template>
                   </v-btn>
 
@@ -89,6 +92,7 @@
                   :dialog="dialog"
                   :devId="dev.id"
                   :closeDialog="closeDialogValue"
+                  @hideDialog="hideDialog"
               />
             </div>
 
@@ -118,8 +122,10 @@ export default {
   data() {
     return {
       value: '',
+      valid: false,
       dialog: false,
-      closeDialogValue: null
+      closeDialogValue: null,
+      nameRules: [v => !!v || 'Обязательное поле', v => (v && v.length >= 5) || 'Минимум 5 цифр', v => (v && v.length < 6) || 'Не более 5 цифр'],
     }
   },
 
@@ -130,6 +136,7 @@ export default {
     },
 
     hideDialog() {
+      console.log('dc')
       this.dialog = false
       this.closeDialogValue = false
     },

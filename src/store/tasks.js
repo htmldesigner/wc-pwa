@@ -53,32 +53,31 @@ export default {
     },
 
     async sendVerifications({commit}, payload) {
-      console.log(payload)
-      // commit('clearError')
-      // commit('setLoading', true)
-      // try {
-      //   let formElem = new FormData()
-      //   formElem.append('device', payload.device)
-      //   formElem.append('value', payload.value)
-      //   formElem.append('coordinates', payload.coordinates)
-      //   formElem.append('photo', payload.photo)
-      //   const response = await axios({
-      //     method: 'post',
-      //     url: "/api/verifications",
-      //     headers: {'Content-Type': 'multipart/form-data'},
-      //     data: formElem
-      //   })
-      //   commit('setLoading', false)
-      //   if (response.data.error) {
-      //     return response.data
-      //   } else {
-      //     return 'success'
-      //   }
-      // } catch (error) {
-      //   commit('setError', error.message)
-      //   commit('setLoading', false)
-      //   throw error
-      // }
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        let formElem = new FormData()
+        formElem.append('device', payload.device)
+        formElem.append('value', payload.value)
+        formElem.append('coordinates', payload.coordinates)
+        formElem.append('photo', payload.photo)
+        const response = await axios({
+          method: 'post',
+          url: "/api/verifications",
+          headers: {'Content-Type': 'multipart/form-data'},
+          data: formElem
+        })
+        commit('setLoading', false)
+        if (response.data.error) {
+          return response.data
+        } else {
+          return 'success'
+        }
+      } catch (error) {
+        commit('setError', error.message)
+        commit('setLoading', false)
+        throw error
+      }
     }
 
   },
