@@ -1,14 +1,15 @@
 <template>
   <div>
-    <v-form v-model="valid">
+    <v-form ref="form" v-model="valid" validation>
 
       <v-col cols="12" sm="12">
         <v-text-field
             label="Текущие показания"
             type="number"
-            v-model.number="value"
+            v-model="value"
             :rules="nameRules"
-            :counter="5"
+            counter
+            maxlength="5"
             required
         ></v-text-field>
       </v-col>
@@ -20,7 +21,6 @@
       />
 
       <div v-if="cameraActive">
-
         <v-container fill-height fluid style="margin-top: 30px; margin-bottom: 20px">
           <v-row align="center" justify="center">
             <v-btn
@@ -50,6 +50,7 @@
                   width="100%"
                   color="primary"
                   @click.prevent="onSubmit"
+                  :disabled="!valid || loading || !this.image"
               >
                 Отправить
                 <template v-slot:loading>
@@ -103,10 +104,7 @@ export default {
       value: '',
       cameraActive: null,
       image: null,
-      nameRules: [
-        v => !!v || 'Обязательно для заполнения',
-        v => v.length <= 5 || 'Не короче 10 цифр',
-      ],
+      nameRules: [v => !!v || 'Обязательное поле', v => (v && v.length >= 5) || 'Минимум 5 цифр', v => (v && v.length <= 5) || 'Не соответствует'],
     }
   },
   methods: {
