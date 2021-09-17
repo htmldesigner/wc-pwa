@@ -11,12 +11,15 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     appName: "E-SEP",
-    coordinates: null
+    coordinates: null,
+    isOnline: false
   },
   mutations: {
     addCoordinates(state, payload) {
       state.coordinates = [payload.lat, payload.lng].join(",")
-      console.log(state.coordinates)
+    },
+    ADD_IS_ONLINE(state, payload) {
+      state.isOnline = payload
     }
   },
 
@@ -28,13 +31,18 @@ export default new Vuex.Store({
         }).catch(e => {
         alert('Разрешите доступ к геоданным')
       })
+    },
+    setOnline({commit}, payload) {
+      commit('ADD_IS_ONLINE', payload)
     }
   },
 
   getters: {
     appName: (state) => state.appName,
-    coordinates: (state) => state.coordinates
+    coordinates: (state) => state.coordinates,
+    isOnline: (state) => state.isOnline
   },
+
   modules: {
     common,
     tasks,

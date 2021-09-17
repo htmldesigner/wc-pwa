@@ -9,9 +9,14 @@
              style="width: 0; margin-left: 10px; margin-right: 30px"
       >
         <v-icon dark>mdi-arrow-left</v-icon>
+
       </v-btn>
       <v-toolbar-title>{{ appName }}</v-toolbar-title>
+
       <v-spacer></v-spacer>
+      <v-icon dark v-if="isOnline">mdi-earth</v-icon>
+      <v-spacer></v-spacer>
+
       <v-menu>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -45,7 +50,16 @@
 
     </v-app-bar>
     <v-main>
+      <div v-if="!loading">
         <router-view></router-view>
+      </div>
+      <div v-else>
+        <v-container fluid class="mt-16">
+          <v-row justify="center" align="center">
+            <Spinner></Spinner>
+          </v-row>
+        </v-container>
+      </div>
     </v-main>
   </v-app>
 </template>
@@ -60,7 +74,7 @@ export default {
     Snackbar, Spinner
   },
   computed: {
-    ...mapGetters(['loading', 'appName'])
+    ...mapGetters(['loading', 'appName', 'isOnline'])
   },
   data() {
     return {};
@@ -77,6 +91,12 @@ export default {
   async mounted() {
     await this.$store.dispatch('detectCoordinates')
     await this.$store.dispatch('getTaskList')
+
+    if (navigator.onLine) {
+      this.$store.dispatch('setOnline', navigator.onLine)
+    } else {
+      this.$store.dispatch('setOnline', navigator.onLine)
+    }
 
   }
 };

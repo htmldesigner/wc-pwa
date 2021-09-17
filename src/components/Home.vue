@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h2 class="mb-3">Список потребителей</h2>
-    <v-layout >
+    <v-layout>
       <v-flex xs12>
         <v-card
             class="elevation-4"

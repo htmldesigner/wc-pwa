@@ -1,4 +1,5 @@
 import axios from "axios";
+import idb from "@/api/idb"
 
 export default {
   state: {
@@ -6,8 +7,16 @@ export default {
   },
 
   mutations: {
-    ADD_TASK(state, payload) {
-      state.tasks = payload
+    async ADD_TASK(state, payload) {
+      if (payload) {
+        idb.getDb("consumers")
+        payload.items.forEach(async (el) => {
+          await idb.saveConsumer(el, "consumers")
+        })
+        state.tasks = {items: await idb.getConsumers("consumers")}
+      } else {
+        console.log('ADD_TASK ERROR')
+      }
     }
   },
 
@@ -16,7 +25,7 @@ export default {
       commit('clearError')
       commit('setLoading', true)
       try {
-        const {data} = await axios.get("/api/consumers")
+        const {data} = await axios.get("/api/consumers?cn=3000")
         commit('ADD_TASK', data)
         commit('setLoading', false)
       } catch (error) {

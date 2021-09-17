@@ -21,6 +21,7 @@ export default {
     LOG_OUT(state) {
       state.agent = null
       localStorage.removeItem('token')
+      delete axios.defaults.headers.common['token'];
     }
   },
   actions: {

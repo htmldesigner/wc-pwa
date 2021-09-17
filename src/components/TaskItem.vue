@@ -6,12 +6,22 @@
         <v-form ref="form" v-model="valid" validation>
           <v-layout mb-3 mt-5>
             <v-card-text>
-              <h1>№ {{ dev.number }}</h1>
+
+              <v-container>
+                <v-row justify="space-between" align="center">
+                  <v-col cols="6" sm="6" style="padding: 0px" align="left">
+                    <h2># {{ dev.number }}</h2>
+                  </v-col>
+                  <v-col cols="6" sm="6" style="padding: 0px" align="right">
+                    <v-icon>mdi-access-point-network-off</v-icon>
+                  </v-col>
+                </v-row>
+              </v-container>
 
               <v-container>
                 <v-row>
-                  <v-col cols="12" sm="12">
-                    <v-text-field
+                  <v-col cols="12" sm="12" style="padding: 12px 0px">
+                    <v-text-field style="padding-top: 0; margin-top: 5px;"
                         label="Текущие показания"
                         type="number"
                         v-model="value"
@@ -20,7 +30,7 @@
                         counter
                         required
                     ></v-text-field>
-                    <div>
+                    <div style="font-size: 12px">
                       <span>Последняя поверка: </span>
                       <span v-if="dev.verified">
                       {{ dev.verified }}
