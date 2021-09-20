@@ -1,13 +1,15 @@
 <template>
   <v-container>
     <h2 class="mb-3">Список потребителей</h2>
+    <Search @searchValue="searchValue"/>
+
     <v-layout>
       <v-flex xs12>
         <v-card
             class="elevation-4"
             mb-5
-            v-for="task in tasks.items"
-            :key="task.id"
+            v-for="(task, index) in tasks.items"
+            :key="index"
             :to="'/task/' + task.id"
         >
           <v-layout mb-3>
@@ -24,18 +26,39 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import Search from "./Search";
+
+const queryName = ['name', 'address']
 
 export default {
+  components: {Search},
   computed: {
-    isAgentLoggedIn(){
+    isAgentLoggedIn() {
       return this.$store.getters.isAgentLoggedIn
     },
-    tasks(){
-      return this.$store.getters.tasks
+    tasks() {
+      return {
+        items: this.$store.getters.tasks.items?.filter(task => {
+          return task.name.toLowerCase().includes(this.query.toLowerCase())
+        })
+      }
     },
-    loading(){
+    loading() {
       return this.$store.getters.loading
+    }
+  },
+  data() {
+    return {
+      query: ''
+    }
+  },
+  methods: {
+    searchValue(value) {
+      if (value) {
+        this.query = value
+      } else {
+        this.query = ''
+      }
     }
   }
 };

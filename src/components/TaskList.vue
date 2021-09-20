@@ -3,7 +3,7 @@
     <v-layout>
       <v-flex xs12>
 
-        <div v-for="task in tasks" :key="task.id">
+        <div v-for="(task, idx) in tasks" :key="idx">
           <v-card>
             <v-layout mb-5 mt-5>
               <v-card-text>
@@ -13,7 +13,7 @@
             </v-layout>
           </v-card>
 
-          <div v-if="task.devices" v-for="device in task.devices" :key="device.id">
+          <div v-if="task.devices" v-for="(device, index) in task.devices" :key="index">
             <TaskItem :dev="device"></TaskItem>
           </div>
         </div>

@@ -8,15 +8,7 @@ export default {
 
   mutations: {
     async ADD_TASK(state, payload) {
-      if (payload) {
-        idb.getDb("consumers")
-        payload.items.forEach(async (el) => {
-          await idb.saveConsumer(el, "consumers")
-        })
-        state.tasks = {items: await idb.getConsumers("consumers")}
-      } else {
-        console.log('ADD_TASK ERROR')
-      }
+      state.tasks = payload
     }
   },
 
@@ -26,7 +18,11 @@ export default {
       commit('setLoading', true)
       try {
         const {data} = await axios.get("/api/consumers?cn=3000")
-        commit('ADD_TASK', data)
+        await idb.clear()
+        await idb.getDb("consumers")
+        await idb.saveConsumer(data.items, "consumers")
+        const result = await idb.getConsumers("consumers")
+        await commit('ADD_TASK', {items: result?.flat(1)})
         commit('setLoading', false)
       } catch (error) {
         commit('setError', error.message)

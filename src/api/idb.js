@@ -4,6 +4,10 @@ let DB;
 
 export default {
 
+  async clear(){
+    await window.indexedDB.deleteDatabase(DB_NAME)
+  },
+
   async getDb(store) {
     return new Promise((resolve, reject) => {
 
@@ -38,13 +42,13 @@ export default {
 
     return new Promise(resolve => {
 
-      let trans = db.transaction([db_field], 'readwrite');
+      let trans = db.transaction([consumer], 'readwrite');
       trans.oncomplete = () => {
         resolve();
       };
 
-      let store = trans.objectStore(db_field);
-      store.delete(consumer.id);
+      // let store = trans.objectStore(db_field);
+      // store.delete(db_field);
     });
   },
 
