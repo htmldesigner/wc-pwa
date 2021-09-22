@@ -40,7 +40,7 @@ export default new Vuex.Store({
   getters: {
     appName: (state) => state.appName,
     coordinates: (state) => state.coordinates,
-    isOnline: (state) => state.isOnline
+    isOnline: (state) => state.isOnline || false
   },
 
   modules: {

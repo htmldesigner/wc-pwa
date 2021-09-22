@@ -3,13 +3,13 @@
   <v-container>
     <v-row>
       <v-col
-          cols="12" class="pa-0"
+          class="pa-0" cols="12"
       >
         <v-text-field
             v-model="inputValue"
-            solo
-            label="Поиск..."
             clearable
+            label="Поиск..."
+            solo
             @input="$emit('searchValue', inputValue)"
         ></v-text-field>
       </v-col>

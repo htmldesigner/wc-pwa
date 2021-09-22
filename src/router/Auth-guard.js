@@ -1,10 +1,10 @@
 import store from '../store'
 
 export default function (to, from, next) {
-    if(store.getters.agent){
-        next()
-    }else {
-        // next('/login?loginError=true')
-        next('/login?loginError=true')
-    }
+  if (store.getters.agent) {
+    next()
+  } else {
+    // next('/login?loginError=true')
+    next('/login?loginError=true')
+  }
 }

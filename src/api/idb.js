@@ -4,7 +4,8 @@ let DB;
 
 export default {
 
-  async clear(){
+  async clear() {
+    console.log('clear')
     await window.indexedDB.deleteDatabase(DB_NAME)
   },
 

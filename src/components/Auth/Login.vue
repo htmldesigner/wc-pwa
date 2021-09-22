@@ -4,21 +4,21 @@
       <v-flex xs12>
         <v-container class="fill-height" fluid>
           <v-row align="center" justify="center">
-            <v-col cols="12" sm="8" md="6">
+            <v-col cols="12" md="6" sm="8">
               <v-card class="elevation-12">
                 <v-toolbar color="primary" dark flat>
                   <v-toolbar-title>Авторизация</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
-                  <v-form v-model="valid" ref="form" validation>
+                  <v-form ref="form" v-model="valid" validation>
                     <v-text-field
+                        v-model="token"
+                        :rules="nameRules"
                         label="Токен"
                         name="login"
                         prepend-icon="mdi-account"
-                        type="text"
-                        v-model="token"
-                        :rules="nameRules"
                         required
+                        type="text"
                     ></v-text-field>
                   </v-form>
                 </v-card-text>

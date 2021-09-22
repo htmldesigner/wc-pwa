@@ -13,7 +13,7 @@
             </v-layout>
           </v-card>
 
-          <div v-if="task.devices" v-for="(device, index) in task.devices" :key="index">
+          <div v-for="(device, index) in task.devices" v-if="task.devices" :key="index">
             <TaskItem :dev="device"></TaskItem>
           </div>
         </div>

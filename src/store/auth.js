@@ -56,8 +56,8 @@ export default {
       return state.agent || localStorage.getItem('token')
     },
     token: (state) => state.token,
-    isAgentLoggedIn(state) {
-      return state.agent !== null
-    }
+    // isAgentLoggedIn(state) {
+    //   return state.agent !== null
+    // }
   }
 }

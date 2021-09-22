@@ -1,11 +1,11 @@
 <template>
   <div>
     <v-text-field
-        label="Текущие показания"
-        type="number"
-        prepend-icon="mdi-counter"
         v-model.number="value"
         :counter="8"
+        label="Текущие показания"
+        prepend-icon="mdi-counter"
+        type="number"
     ></v-text-field>
   </div>
 </template>

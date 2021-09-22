@@ -4,13 +4,13 @@
 
       <v-col cols="12" sm="12">
         <v-text-field
-            label="Текущие показания"
-            type="number"
             v-model="value"
             :rules="nameRules"
-            maxlength="5"
             counter
+            label="Текущие показания"
+            maxlength="5"
             required
+            type="number"
         ></v-text-field>
       </v-col>
 
@@ -24,18 +24,18 @@
         <v-container fill-height fluid style="margin-top: 30px; margin-bottom: 20px">
           <v-row align="center" justify="center">
             <v-btn
+                class="btn btn-primary"
                 style="margin: 0px 10px"
                 type="button"
-                class="btn btn-primary"
                 @click="onCapture"
             >
               <v-icon>mdi-camera</v-icon>
             </v-btn>
 
             <v-btn
+                class="btn btn-primary"
                 style="margin: 0px 10px"
                 type="button"
-                class="btn btn-primary"
                 @click="removeCapture"
             >
               <v-icon>mdi-close</v-icon>
@@ -47,10 +47,10 @@
           <v-row>
             <v-col cols="12" sm="12">
               <v-btn
-                  width="100%"
-                  color="primary"
-                  @click.prevent="onSubmit"
                   :disabled="!valid || loading || !this.image"
+                  color="primary"
+                  width="100%"
+                  @click.prevent="onSubmit"
               >
                 Отправить
                 <template v-slot:loading>

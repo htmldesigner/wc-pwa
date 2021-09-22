@@ -2,19 +2,19 @@
 
   <div class="" style="margin-top: 25px">
 
-    <div class="image_container" v-if="img">
+    <div v-if="img" class="image_container">
       <img :src="img" class="img-responsive"/>
     </div>
 
-    <div class="camera_container" v-show="!img">
+    <div v-show="!img" class="camera_container">
       <vue-web-cam
           ref="webcam"
           :device-id="deviceId"
           height="100%"
+          @cameras="onCameras"
+          @error="onError"
           @started="onStarted"
           @stopped="onStopped"
-          @error="onError"
-          @cameras="onCameras"
           @camera-change="onCameraChange"
       />
     </div>
@@ -72,7 +72,7 @@ export default {
   methods: {
     onCapture() {
       this.img = this.$refs.webcam.capture();
-      if (this.img){
+      if (this.img) {
         this.$emit('image', this.img)
       }
     },

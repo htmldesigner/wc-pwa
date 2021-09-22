@@ -17,7 +17,7 @@ export default {
       commit('clearError')
       commit('setLoading', true)
       try {
-        const {data} = await axios.get("/api/consumers?cn=3000")
+        const {data} = await axios.get("/api/consumers")
         await idb.clear()
         await idb.getDb("consumers")
         await idb.saveConsumer(data.items, "consumers")
@@ -38,12 +38,14 @@ export default {
         let formElem = new FormData()
         formElem.append('device', payload.device)
         formElem.append('value', payload.value)
+
         const response = await axios({
           method: 'post',
           url: "/api/indications",
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           data: formElem
         })
+
         commit('setLoading', false)
         if (response.data.error) {
           return response.data

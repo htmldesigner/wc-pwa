@@ -6,11 +6,11 @@
     <v-layout>
       <v-flex xs12>
         <v-card
-            class="elevation-4"
-            mb-5
             v-for="(task, index) in tasks.items"
             :key="index"
             :to="'/task/' + task.id"
+            class="elevation-4"
+            mb-5
         >
           <v-layout mb-3>
             <v-card-text>
@@ -33,9 +33,6 @@ const queryName = ['name', 'address']
 export default {
   components: {Search},
   computed: {
-    isAgentLoggedIn() {
-      return this.$store.getters.isAgentLoggedIn
-    },
     tasks() {
       return {
         items: this.$store.getters.tasks.items?.filter(task => {

@@ -3,10 +3,10 @@
     {{ text }}
     <template v-slot:action="{ attrs }">
       <v-btn
-        color="pink"
-        text
-        v-bind="attrs"
-        @click="active = false"
+          v-bind="attrs"
+          color="pink"
+          text
+          @click="active = false"
       >
         Close
       </v-btn>
@@ -17,10 +17,10 @@
 <script>
 export default {
 
-    props: {
-        text: String,
-        active: Boolean
-    },
+  props: {
+    text: String,
+    active: Boolean
+  },
 
 }
 </script>

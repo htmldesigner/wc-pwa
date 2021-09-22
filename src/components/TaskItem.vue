@@ -8,11 +8,11 @@
             <v-card-text>
 
               <v-container>
-                <v-row justify="space-between" align="center">
-                  <v-col cols="6" sm="6" style="padding: 0px" align="left">
+                <v-row align="center" justify="space-between">
+                  <v-col align="left" cols="6" sm="6" style="padding: 0px">
                     <h2># {{ dev.number }}</h2>
                   </v-col>
-                  <v-col cols="6" sm="6" style="padding: 0px" align="right">
+                  <v-col align="right" cols="6" sm="6" style="padding: 0px">
                     <v-icon>mdi-access-point-network-off</v-icon>
                   </v-col>
                 </v-row>
@@ -21,34 +21,54 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="12" style="padding: 12px 0px">
-                    <v-text-field style="padding-top: 0; margin-top: 5px;"
-                        label="Текущие показания"
-                        type="number"
-                        v-model="value"
-                        :rules="nameRules"
-                        maxlength="5"
-                        counter
-                        required
+                    <v-text-field v-model="value"
+                                  :rules="nameRules"
+                                  counter
+                                  label="Текущие показания"
+                                  maxlength="5"
+                                  required
+                                  style="padding-top: 0; margin-top: 5px;"
+                                  type="number"
                     ></v-text-field>
-                    <div style="font-size: 12px">
+
+                    <div style="font-size: 12px" v-if="dev.verified">
                       <span>Последняя поверка: </span>
-                      <span v-if="dev.verified">
+                      <span >
                       {{ dev.verified }}
                     </span>
                     </div>
+
+
+                    <div v-if="dev.lastIndication">
+                      <div style="font-size: 12px">
+                        <span>Последнии показания: </span>
+                        <span v-if="dev.lastIndication.value">
+                      {{ dev.lastIndication.value }}
+                        </span>
+                      </div>
+
+                      <div style="font-size: 12px">
+                        <span>Дата отправки показаний: </span>
+                        <span v-if="dev.lastIndication.date">
+                      {{ moment(dev.lastIndication.date, 'DD.MM.YYYY hh:mm').format('DD.MM.YYYY') }}
+                       </span>
+                      </div>
+                    </div>
+
+
                   </v-col>
                 </v-row>
               </v-container>
 
 
-              <v-row justify="space-between" align="center">
-                <v-col xs="6" class="text-center">
+              <v-row align="center" justify="space-between">
+                <v-col class="text-center" xs="6">
 
                   <v-btn
-                      color="primary"
-                      @click="showDialog"
-                      width="100%"
                       :disabled="loading"
+                      color="primary"
+                      width="100%"
+                      @click="showDialog"
                   >
                     Поверка
                     <template v-slot:loader>
@@ -58,12 +78,12 @@
 
                 </v-col>
 
-                <v-col xs="6" class="text-center">
+                <v-col class="text-center" xs="6">
                   <v-btn
-                      width="100%"
-                      color="success"
-                      @click.prevent="onSubmit(dev.id)"
                       :disabled="!valid || loading"
+                      color="success"
+                      width="100%"
+                      @click.prevent="onSubmit(dev.id)"
                   >
                     Показания
                     <template v-slot:loader>
@@ -81,14 +101,14 @@
       </v-card>
     </div>
 
-    <v-dialog v-model="dialog" width="500" dense flat>
+    <v-dialog v-model="dialog" dense flat width="500">
       <template v-slot:default="dialog">
         <v-card>
           <v-toolbar color="primary" dark>
             <v-spacer></v-spacer>
             <v-btn
-                icon
                 dark
+                icon
                 @click="hideDialog"
             >
               <v-icon>mdi-close</v-icon>
@@ -99,9 +119,9 @@
 
             <div>
               <VerificationForm
-                  :dialog="dialog"
-                  :devId="dev.id"
                   :closeDialog="closeDialogValue"
+                  :devId="dev.id"
+                  :dialog="dialog"
                   @hideDialog="hideDialog"
               />
             </div>

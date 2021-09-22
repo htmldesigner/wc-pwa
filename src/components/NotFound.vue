@@ -7,7 +7,8 @@
             <v-col>
               <h1>Error! Not Found.</h1>
 
-              <v-btn :to="'/'">Go Home</v-btn></v-col
+              <v-btn :to="'/'">Go Home</v-btn>
+            </v-col
             >
           </v-row>
         </v-container>
