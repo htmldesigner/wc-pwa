@@ -29,7 +29,10 @@ export default new Vuex.Store({
         .then(coordinates => {
           commit('addCoordinates', coordinates)
         }).catch(e => {
-        alert('Разрешите доступ к геоданным')
+        dispatch('setAlertMessage', {
+          type: 'warning',
+          message: 'Разрешите доступ к геоданным и перезагрузите приложение'
+        })
       })
     },
     setOnline({commit}, payload) {

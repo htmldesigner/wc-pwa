@@ -33,7 +33,7 @@
 
                     <div style="font-size: 12px" v-if="dev.verified">
                       <span>Последняя поверка: </span>
-                      <span >
+                      <span>
                       {{ dev.verified }}
                     </span>
                     </div>
@@ -147,7 +147,7 @@ export default {
   name: "TaskItem",
   props: ['dev'],
   computed: {
-    ...mapGetters(['loading', 'appName'])
+    ...mapGetters(['loading', 'appName', 'coordinates'])
   },
   data() {
     return {
@@ -166,23 +166,33 @@ export default {
     },
 
     hideDialog() {
-      console.log('dc')
       this.dialog = false
       this.closeDialogValue = false
     },
 
     onSubmit(deviceId) {
-      if (this.value && deviceId) {
-        let newData = {device: deviceId, value: this.value}
-        this.$store.dispatch('sendTask', newData).then(response => {
-          if (response.error) {
-            return alert(response.error)
-          }
-          if (response === 'success') {
-            return alert('Обнавленно')
-          }
+      if (this.coordinates) {
+        if (this.value && deviceId) {
+          let newData = {device: deviceId, value: this.value}
+          this.$store.dispatch('sendTask', newData).then(response => {
+            if (response.error) {
+              this.$store.dispatch('setAlertMessage', {type: 'error', message: response.error})
+            }
+            if (response === 'success') {
+              this.$store.dispatch('getTaskList')
+              this.$store.dispatch('setAlertMessage', {type: 'success', message: 'Данные обновлены'})
+            }
+          })
+        }
+
+      } else {
+        this.$store.dispatch('setAlertMessage', {
+          type: 'warning',
+          message: 'Разрешите доступ к геоданным и перезагрузите приложение'
         })
       }
+
+
     }
   }
 }

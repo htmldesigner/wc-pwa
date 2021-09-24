@@ -1,5 +1,7 @@
 <template>
   <v-app id="inspire">
+
+
     <v-app-bar app color="primary" dark dense flat>
       <v-btn v-if="$route.path !== '/'"
              fab
@@ -16,7 +18,7 @@
       <v-icon v-if="isOnline" dark>mdi-earth</v-icon>
       <v-spacer></v-spacer>
 
-      <v-menu v-if="agent">
+      <v-menu v-if="token">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
               v-bind="attrs"
@@ -37,9 +39,9 @@
               <v-list-item-subtitle style="font-size: 12px">Список потребителей</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item>
-            <v-list-item-title @click="$router.push('/settings')">{{ 'Настройки' }}</v-list-item-title>
-          </v-list-item>
+          <!--          <v-list-item>-->
+          <!--            <v-list-item-title @click="$router.push('/settings')">{{ 'Настройки' }}</v-list-item-title>-->
+          <!--          </v-list-item>-->
           <v-list-item>
             <v-list-item-title @click="logOut">{{ 'Выход' }}</v-list-item-title>
           </v-list-item>
@@ -48,6 +50,10 @@
       </v-menu>
 
     </v-app-bar>
+
+
+    <Notification v-if="alertMessage" :notification="alertMessage"/>
+
     <v-main>
       <div v-if="!loading">
         <router-view></router-view>
@@ -67,16 +73,20 @@
 import Snackbar from "./components/Snackbar.vue";
 import {mapGetters} from 'vuex';
 import Spinner from "./components/Spinner";
+import Notification from "./components/Notification";
+
 
 export default {
   components: {
-    Snackbar, Spinner
+    Snackbar, Spinner, Notification
   },
   computed: {
-    ...mapGetters(['loading', 'appName', 'isOnline', 'agent'])
+    ...mapGetters(['loading', 'appName', 'isOnline', 'token', 'alertMessage'])
   },
   data() {
-    return {};
+    return {
+
+    };
   },
   methods: {
     async logOut() {
@@ -84,7 +94,7 @@ export default {
       await this.$router.push('/login');
     },
     async reloadAllList() {
-      if (this.agent)
+      if (this.token)
         await this.$store.dispatch('getTaskList')
     },
   },
@@ -93,7 +103,7 @@ export default {
       this.$store.dispatch('setOnline', navigator.onLine)
     }
     await this.$store.dispatch('detectCoordinates')
-    if (this.agent)
+    if (this.token)
       await this.$store.dispatch('getTaskList')
   }
 };

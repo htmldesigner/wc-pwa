@@ -1,7 +1,8 @@
 export default {
   state: {
     loading: false,
-    error: null
+    error: null,
+    message: null  //{type: 'success', message: 'Данные отправленны'}
   },
   mutations: {
     setLoading(state, payload) {
@@ -9,6 +10,9 @@ export default {
     },
     setError(state, payload) {
       state.error = payload
+    },
+    setAlertMessage(state, payload) {
+      state.message = payload
     },
     clearError(state) {
       state.error = null
@@ -18,6 +22,12 @@ export default {
     setLoading({commit}, payload) {
       commit('setLoading', payload)
     },
+    setAlertMessage({commit}, payload) {
+      commit('setAlertMessage', payload)
+      setTimeout(() => {
+        commit('setAlertMessage', null)
+      }, 4000)
+    },
     setError({commit}, payload) {
       commit('setError', payload)
     },
@@ -26,6 +36,9 @@ export default {
     }
   },
   getters: {
+    alertMessage(state) {
+      return state.message
+    },
     loading(state) {
       return state.loading
     },

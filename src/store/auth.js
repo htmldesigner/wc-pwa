@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default {
   state: {
-    token: null,
+    token: localStorage.getItem('token') || null,
     agent: null,
   },
   mutations: {
@@ -20,12 +20,14 @@ export default {
     },
     LOG_OUT(state) {
       state.agent = null
+      state.token = null
       localStorage.removeItem('token')
       delete axios.defaults.headers.common['token'];
     }
   },
   actions: {
     async userAuth({state, commit, dispatch}, token) {
+      dispatch('clearTask')
       try {
         let formElem = new FormData()
         formElem.append('token', token)
@@ -37,7 +39,10 @@ export default {
         })
         let {data} = response
         if (data.error) {
-          return alert(data.error)
+          dispatch('setAlertMessage', {
+            type: 'error',
+            message: data.error
+          })
         } else {
           commit('ADD_AGENT', data)
           commit('ADD_TOKEN', token)
@@ -47,17 +52,15 @@ export default {
         console.log(e)
       }
     },
-    logOut({commit}) {
-      commit('LOG_OUT')
+    async logOut({commit, dispatch}) {
+      await commit('LOG_OUT')
+      await dispatch('clearTask')
     }
   },
   getters: {
     agent(state) {
-      return state.agent || localStorage.getItem('token')
+      return state.agent
     },
     token: (state) => state.token,
-    // isAgentLoggedIn(state) {
-    //   return state.agent !== null
-    // }
   }
 }

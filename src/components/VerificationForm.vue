@@ -130,10 +130,23 @@ export default {
           coordinates: this.coordinates,
           photo: await (await (await fetch(this.image))).blob()
         }
-        this.$store.dispatch('sendVerifications', data)
-        this.$emit('hideDialog')
+
+        this.$store.dispatch('sendVerifications', data).then(response => {
+          if (response.error) {
+            this.$store.dispatch('setAlertMessage', {type: 'error', message: response.error})
+          }
+          if (response === 'success') {
+            this.$store.dispatch('getTaskList')
+            this.$emit('hideDialog')
+            this.$store.dispatch('setAlertMessage', {type: 'success', message: 'Данные обновлены'})
+          }
+        })
+
       } else {
-        alert('Разрешите доступ к геоданным и перезагрузите приложение')
+        this.$store.dispatch('setAlertMessage', {
+          type: 'warning',
+          message: 'Разрешите доступ к геоданным и перезагрузите приложение'
+        })
       }
     }
   }
