@@ -2,7 +2,6 @@
   <v-container>
     <h2 class="mb-3">Список потребителей</h2>
     <Search @searchValue="searchValue"/>
-
     <v-layout>
       <v-flex xs12>
         <v-card

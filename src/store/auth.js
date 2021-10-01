@@ -33,7 +33,7 @@ export default {
         formElem.append('token', token)
         const response = await axios({
           method: 'post',
-          url: "/api/auth",
+          url: "/system/api/auth",
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           data: formElem
         })
@@ -52,9 +52,15 @@ export default {
         console.log(e)
       }
     },
-    async logOut({commit, dispatch}) {
-      await commit('LOG_OUT')
-      await dispatch('clearTask')
+    async logOut({commit, dispatch, getters}, token) {
+      const currentToken = localStorage.getItem('token')
+      if (currentToken === token) {
+        commit('LOG_OUT')
+        dispatch('clearTask')
+        return true
+      } else {
+        return false
+      }
     }
   },
   getters: {

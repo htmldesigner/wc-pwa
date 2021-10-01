@@ -25,7 +25,7 @@ export default {
       commit('clearError')
       commit('setLoading', true)
       try {
-        const {data} = await axios.get("/api/consumers")
+        const {data} = await axios.get("/system/api/consumers")
         // await idb.clear()
         // await idb.getDb("consumers")
         // await idb.saveConsumer(data.items, "consumers")
@@ -50,7 +50,7 @@ export default {
 
         const response = await axios({
           method: 'post',
-          url: "/api/indications",
+          url: "/system/api/indications",
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           data: formElem
         })
@@ -62,7 +62,6 @@ export default {
         } else {
           return 'success'
         }
-
       } catch (error) {
         commit('setError', error.message)
         commit('setLoading', false)
@@ -81,7 +80,7 @@ export default {
         formElem.append('photo', payload.photo)
         const response = await axios({
           method: 'post',
-          url: "/api/verifications",
+          url: "/system/api/verifications",
           headers: {'Content-Type': 'multipart/form-data'},
           data: formElem
         })

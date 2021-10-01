@@ -18,7 +18,7 @@
       <v-icon v-if="isOnline" dark>mdi-earth</v-icon>
       <v-spacer></v-spacer>
 
-      <v-menu v-if="token">
+      <v-menu v-if="token && isOnline">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
               v-bind="attrs"
@@ -31,7 +31,6 @@
             <v-icon dark>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
-
         <v-list flat>
           <v-list-item>
             <v-list-item-content>
@@ -51,8 +50,8 @@
 
     </v-app-bar>
 
-
     <Notification v-if="alertMessage" :notification="alertMessage"/>
+    <ConfirmLogOut @closeConfirmLogOut="confirmLogOut = false" :dialog="confirmLogOut"/>
 
     <v-main>
       <div v-if="!loading">
@@ -74,24 +73,25 @@ import Snackbar from "./components/Snackbar.vue";
 import {mapGetters} from 'vuex';
 import Spinner from "./components/Spinner";
 import Notification from "./components/Notification";
+import ConfirmLogOut from "./components/Auth/ConfirmLogOut";
 
 
 export default {
   components: {
-    Snackbar, Spinner, Notification
+    Snackbar, Spinner, Notification, ConfirmLogOut
   },
   computed: {
-    ...mapGetters(['loading', 'appName', 'isOnline', 'token', 'alertMessage'])
+    ...mapGetters(['loading', 'appName', 'isOnline', 'token', 'alertMessage', 'tasks'])
   },
   data() {
     return {
-
-    };
+      confirmLogOut: false
+    }
   },
+
   methods: {
-    async logOut() {
-      await this.$store.dispatch('logOut')
-      await this.$router.push('/login');
+    logOut() {
+      this.confirmLogOut = !this.confirmLogOut
     },
     async reloadAllList() {
       if (this.token)
@@ -99,10 +99,21 @@ export default {
     },
   },
   async mounted() {
+
     if (navigator.onLine) {
       this.$store.dispatch('setOnline', navigator.onLine)
     }
+
+    window.addEventListener('offline', () => {
+      this.$store.dispatch('setOnline', false)
+    });
+
+    window.addEventListener('online', () => {
+      this.$store.dispatch('setOnline', true)
+    });
+
     await this.$store.dispatch('detectCoordinates')
+
     if (this.token)
       await this.$store.dispatch('getTaskList')
   }

@@ -19,6 +19,7 @@
                         prepend-icon="mdi-account"
                         required
                         type="text"
+                        v-on:keyup.enter="onSubmit"
                     ></v-text-field>
                   </v-form>
                 </v-card-text>
