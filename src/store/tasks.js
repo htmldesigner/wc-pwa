@@ -7,17 +7,18 @@ export default {
   },
 
   mutations: {
-    async ADD_TASK(state, payload) {
+    ADD_TASK(state, payload) {
       state.tasks = payload
     },
-    async CLAER_TASK(state, payload) {
+    CLAER_TASK(state, payload) {
       state.tasks = payload
     }
   },
 
   actions: {
-    async clearTask({commit}){
+    async clearTask({commit}) {
       await commit('CLAER_TASK', [])
+      return idb.closeAndRemove()
     },
 
     async getTaskList({commit}) {
@@ -26,11 +27,11 @@ export default {
       commit('setLoading', true)
       try {
         const {data} = await axios.get("/system/api/consumers")
-        // await idb.clear()
-        // await idb.getDb("consumers")
-        // await idb.saveConsumer(data.items, "consumers")
-        // const result = await idb.getConsumers("consumers")
-        // await commit('ADD_TASK', {items: result?.flat(1)})
+        await idb.clear()
+        await idb.getDb("consumers")
+        await idb.saveConsumer(data.items, "consumers")
+        const result = await idb.getConsumers("consumers")
+        await commit('ADD_TASK', {items: result?.flat(1)})
         await commit('ADD_TASK', data)
         commit('setLoading', false)
       } catch (error) {

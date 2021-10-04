@@ -5,13 +5,28 @@ let DB;
 export default {
 
   async clear() {
-    console.log('clear')
     await window.indexedDB.deleteDatabase(DB_NAME)
+  },
+
+  async closeAndRemove() {
+    if (DB) DB.close()
+    let req = await this.clear()
+    if (req){
+      req.onsuccess = function () {
+        console.log("Deleted database successfully");
+      };
+      req.onerror = function () {
+        console.log("Couldn't delete database");
+      };
+      req.onblocked = function () {
+        console.log("Couldn't delete database due to the operation being blocked");
+      };
+    }
+    DB = null
   },
 
   async getDb(store) {
     return new Promise((resolve, reject) => {
-
       if (DB) {
         return resolve(DB);
       }
@@ -33,6 +48,7 @@ export default {
         let db = e.target.result;
         db.createObjectStore(store, {autoIncrement: true, keyPath: 'id'});
       };
+
     });
   },
 
