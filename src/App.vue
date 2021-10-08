@@ -87,16 +87,22 @@ export default {
   watch: {
     isOnline: function (isOnline) {
       console.log(isOnline)
-      if (isOnline)
-      setTimeout(() => {
-        this.$store.dispatch('sendTemporalData')
-      }, 5000)
+      if (isOnline) {
+        setTimeout(() => {
+          this.$store.dispatch('sendTemporalData')
+          this.timeInterval = setInterval(() => this.$store.dispatch('getTaskList'), (5000 * 12) * 15)
+        }, 5000)
+      }else {
+        clearInterval(this.timeInterval)
+      }
+
     }
   },
 
   data() {
     return {
-      confirmLogOut: false
+      confirmLogOut: false,
+      timeInterval: null
     }
   },
 
@@ -107,7 +113,7 @@ export default {
     async reloadAllList() {
       if (this.token)
         await this.$store.dispatch('getTaskList')
-    },
+    }
   },
   async mounted() {
 

@@ -123,23 +123,24 @@ export default {
           let candidate = await service.arrayTemporalFilter(result, payload)
           await idb.clearTable("temporal")
           await idb.saveConsumer(candidate, "temporal")
+          return 'pending'
         }
-        return 'pending'
       }
     },
 
     async sendTemporalData({commit, dispatch}) {
       let result = await idb.getTable("temporal")
-
       if (result?.flat().length) {
         result?.flat().forEach(element => {
-          console.log(element)
-          dispatch('sendTask', element)
+          if (element.photo) {
+            dispatch('sendVerifications', element)
+          } else {
+            dispatch('sendTask', element)
+          }
         })
       } else {
         return false
       }
-
       await idb.clearTable("temporal")
       await idb.clearTable("consumers")
       await dispatch('getTaskList')
