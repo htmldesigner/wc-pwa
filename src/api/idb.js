@@ -25,7 +25,7 @@ export default {
     DB = null
   },
 
-  async getDb(store) {
+  async getDb() {
     return new Promise((resolve, reject) => {
       if (DB) {
         return resolve(DB);
@@ -46,44 +46,49 @@ export default {
       request.onupgradeneeded = e => {
         console.log('onupgradeneeded');
         let db = e.target.result;
-        db.createObjectStore(store, {autoIncrement: true, keyPath: 'id'});
+        db.createObjectStore("consumers", {autoIncrement: true, keyPath: 'id'});
+        db.createObjectStore('temporal', {autoIncrement: true, keyPath: 'id'});
       };
 
     });
   },
 
 
-  async deleteConsumer(consumer, db_field) {
-
+  async clearTable(table) {
+    console.log('clearTable', table)
     let db = await this.getDb();
-
     return new Promise(resolve => {
-
-      let trans = db.transaction([consumer], 'readwrite');
+      let trans = db.transaction([table], 'readwrite');
       trans.oncomplete = () => {
         resolve();
       };
-
-      // let store = trans.objectStore(db_field);
-      // store.delete(db_field);
+      let store = trans.objectStore(table);
+      store.clear();
     });
   },
 
-
-  async getConsumers(db_field) {
-
+  async deleteConsumer(id, table) {
+    console.log('deleteConsumer')
     let db = await this.getDb();
-
     return new Promise(resolve => {
+      let trans = db.transaction([table], 'readwrite');
+      trans.oncomplete = () => {
+        resolve();
+      };
+      let store = trans.objectStore(table);
+      store.delete(id);
+    });
+  },
 
+  async getTable(db_field) {
+    let db = await this.getDb();
+    return new Promise(resolve => {
       let trans = db.transaction([db_field], 'readonly');
       trans.oncomplete = () => {
         resolve(cats);
       };
-
       let store = trans.objectStore(db_field);
       let cats = [];
-
       store.openCursor().onsuccess = e => {
         let cursor = e.target.result;
         if (cursor) {
@@ -91,10 +96,8 @@ export default {
           cursor.continue();
         }
       };
-
     });
   },
-
 
   async getConsumersByID() {
     // let db = await this.getDb();
@@ -121,7 +124,7 @@ export default {
   },
 
 
-  async saveConsumer(consumer, db_field) {
+  async saveConsumer(table, db_field) {
     let db = await this.getDb();
     return new Promise(resolve => {
       let trans = db.transaction([db_field], 'readwrite');
@@ -129,7 +132,7 @@ export default {
         resolve();
       };
       let store = trans.objectStore(db_field);
-      store.put(consumer);
+      store.put(table);
     });
 
   }

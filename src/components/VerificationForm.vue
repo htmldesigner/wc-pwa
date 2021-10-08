@@ -130,7 +130,6 @@ export default {
           coordinates: this.coordinates,
           photo: await (await (await fetch(this.image))).blob()
         }
-
         this.$store.dispatch('sendVerifications', data).then(response => {
           if (response.error) {
             this.$store.dispatch('setAlertMessage', {type: 'error', message: response.error})
@@ -140,8 +139,11 @@ export default {
             this.$emit('hideDialog')
             this.$store.dispatch('setAlertMessage', {type: 'success', message: 'Данные обновлены'})
           }
+          if (response === 'pending') {
+            this.$emit('hideDialog')
+            this.$store.dispatch('setAlertMessage', {type: 'warning', message: 'В ожидании отправки'})
+          }
         })
-
       } else {
         this.$store.dispatch('setAlertMessage', {
           type: 'warning',

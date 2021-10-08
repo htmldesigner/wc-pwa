@@ -15,7 +15,6 @@ if (token) {
   Vue.prototype.$http.defaults.headers.common['token'] = `${token}`
 }
 
-
 Vue.prototype.moment = moment
 
 Vue.config.productionTip = false

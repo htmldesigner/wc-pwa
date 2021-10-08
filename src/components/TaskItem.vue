@@ -12,7 +12,7 @@
                   <v-col align="left" cols="6" sm="6" style="padding: 0px">
                     <h2># {{ dev.number }}</h2>
                   </v-col>
-                  <v-col align="right" cols="6" sm="6" style="padding: 0px">
+                  <v-col v-if="dev.waiting" align="right" cols="6" sm="6" style="padding: 0px">
                     <v-icon>mdi-access-point-network-off</v-icon>
                   </v-col>
                 </v-row>
@@ -54,7 +54,6 @@
                        </span>
                       </div>
                     </div>
-
 
                   </v-col>
                 </v-row>
@@ -182,17 +181,17 @@ export default {
               this.$store.dispatch('getTaskList')
               this.$store.dispatch('setAlertMessage', {type: 'success', message: 'Данные обновлены'})
             }
+            if (response === 'pending') {
+              this.$store.dispatch('setAlertMessage', {type: 'warning', message: 'В ожидании отправки'})
+            }
           })
         }
-
       } else {
         this.$store.dispatch('setAlertMessage', {
           type: 'warning',
           message: 'Разрешите доступ к геоданным и перезагрузите приложение'
         })
       }
-
-
     }
   }
 }

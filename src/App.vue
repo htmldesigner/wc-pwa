@@ -83,6 +83,17 @@ export default {
   computed: {
     ...mapGetters(['loading', 'appName', 'isOnline', 'token', 'alertMessage', 'tasks'])
   },
+
+  watch: {
+    isOnline: function (isOnline) {
+      console.log(isOnline)
+      if (isOnline)
+      setTimeout(() => {
+        this.$store.dispatch('sendTemporalData')
+      }, 5000)
+    }
+  },
+
   data() {
     return {
       confirmLogOut: false
