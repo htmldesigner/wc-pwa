@@ -86,16 +86,14 @@ export default {
 
   watch: {
     isOnline: function (isOnline) {
-      console.log(isOnline)
       if (isOnline) {
         setTimeout(() => {
           this.$store.dispatch('sendTemporalData')
           this.timeInterval = setInterval(() => this.$store.dispatch('getTaskList'), (5000 * 12) * 15)
         }, 5000)
-      }else {
+      } else {
         clearInterval(this.timeInterval)
       }
-
     }
   },
 
@@ -136,4 +134,11 @@ export default {
   }
 };
 </script>
+
+<style>
+html {
+  /*touch-action: none*/
+  overscroll-behavior: contain;
+}
+</style>
 
