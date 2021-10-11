@@ -22,20 +22,28 @@ export default {
       return idb.closeAndRemove()
     },
 
-    async getTaskList({commit}) {
+    async getTaskList({commit, getters}) {
       commit('CLAER_TASK', [])
       commit('clearError')
       commit('setLoading', true)
       try {
-        const {data} = await axios.get("/system/api/consumers")
-        await idb.clear()
-        // await idb.clearTable("consumers")
-        await idb.getDb()
-        await idb.saveConsumer(data.items, "consumers")
-        const result = await idb.getTable("consumers")
-        await commit('ADD_TASK', {items: result?.flat(1)})
-        await commit('ADD_TASK', data)
-        commit('setLoading', false)
+        if (getters.isOnline){
+          const {data} = await axios.get("/system/api/consumers")
+          await idb.clear()
+          // await idb.clearTable("consumers")
+          await idb.getDb()
+          await idb.saveConsumer(data.items, "consumers")
+          const result = await idb.getTable("consumers")
+          await commit('ADD_TASK', {items: result?.flat(1)})
+          await commit('ADD_TASK', data)
+          commit('setLoading', false)
+        }else {
+          await idb.getDb()
+          const result = await idb.getTable("consumers")
+          await commit('ADD_TASK', {items: result?.flat(1)})
+          await commit('ADD_TASK', data)
+          commit('setLoading', false)
+        }
       } catch (error) {
         commit('setError', error.message)
         commit('setLoading', false)
